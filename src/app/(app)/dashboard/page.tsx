@@ -1,0 +1,52 @@
+'use client';
+
+import { useEffect } from 'react';
+import { useTaskStore } from '@/stores/taskStore';
+import { useProjectStore } from '@/stores/projectStore';
+import { useAuthStore } from '@/stores/authStore';
+import { StatsGrid } from '@/components/dashboard/StatsGrid';
+import { RecentProjects } from '@/components/dashboard/RecentProjects';
+import { MyTasksList } from '@/components/dashboard/MyTasksList';
+import { ActivityFeed } from '@/components/dashboard/ActivityFeed';
+
+export default function DashboardPage() {
+  const { fetchTasks } = useTaskStore();
+  const { fetchProjects } = useProjectStore();
+  const { user } = useAuthStore();
+
+  useEffect(() => {
+    fetchTasks();
+    fetchProjects();
+  }, [fetchTasks, fetchProjects]);
+
+  const hour = new Date().getHours();
+  const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+
+  return (
+    <div className="space-y-8 animate-fade-up">
+      {/* Greeting */}
+      <div>
+        <h1 className="text-3xl font-bold text-primary tracking-tight pb-1">
+          {greeting}, {user?.name?.split(' ')[0]} 👋
+        </h1>
+        <p className="text-sm mt-1 text-secondary font-medium">
+          Here&apos;s what&apos;s happening in your workspace today.
+        </p>
+      </div>
+
+      {/* Stats */}
+      <StatsGrid />
+
+      {/* Main content grid */}
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        <div className="xl:col-span-2 space-y-6">
+          <RecentProjects />
+          <MyTasksList />
+        </div>
+        <div>
+          <ActivityFeed />
+        </div>
+      </div>
+    </div>
+  );
+}
