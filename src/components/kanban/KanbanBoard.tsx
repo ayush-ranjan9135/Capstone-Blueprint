@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { useTaskStore, type Task, type TaskStatus } from '@/stores/taskStore';
+import { useTaskStore } from '@/stores/taskStore';
+import type { Task, TaskStatus } from '@/types';
 import { TaskCard } from './TaskCard';
 import { TaskModal } from './TaskModal';
 import { Plus } from 'lucide-react';

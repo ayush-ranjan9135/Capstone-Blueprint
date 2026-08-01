@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useTaskStore, type Task, type TaskStatus, type Priority } from '@/stores/taskStore';
+import { useTaskStore } from '@/stores/taskStore';
+import type { Task, TaskStatus, Priority } from '@/types';
 import { X, Trash2, Calendar, Tag, User, AlignLeft, CheckSquare, Square } from 'lucide-react';
 
 const statusOptions: { value: TaskStatus; label: string; textClass: string }[] = [

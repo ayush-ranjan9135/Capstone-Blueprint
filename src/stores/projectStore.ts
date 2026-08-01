@@ -1,16 +1,5 @@
 import { create } from 'zustand';
-
-export interface Project {
-  id: string;
-  name: string;
-  description?: string;
-  color: string;
-  ownerId: string;
-  memberIds: string[];
-  status: 'active' | 'completed' | 'archived';
-  createdAt: string;
-  updatedAt: string;
-}
+import type { Project } from '@/types';
 
 interface ProjectState {
   projects: Project[];

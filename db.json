@@ -205,7 +205,7 @@
       "id": "tm-3",
       "title": "Initialize shadcn/ui and design token system",
       "description": "Run `npx shadcn init`, configure `components.json`, add base components (Button, Dialog, Input, Badge, Avatar, Tooltip, Skeleton, DropdownMenu).",
-      "status": "in-progress",
+      "status": "done",
       "priority": "high",
       "projectId": "proj-1",
       "sprintId": "sprint-13",
@@ -244,13 +244,13 @@
         }
       ],
       "createdAt": "2026-07-29T08:00:00Z",
-      "updatedAt": "2026-07-29T10:30:00Z"
+      "updatedAt": "2026-08-01T05:16:52.993Z"
     },
     {
       "id": "tm-4",
       "title": "Write README and architecture blueprint",
       "description": "Complete Sprint 13 deliverable: README, Prompts.md, wireframes, state tree diagram, component flow diagram, folder structure, API documentation, and development roadmap.",
-      "status": "in-review",
+      "status": "done",
       "priority": "critical",
       "projectId": "proj-1",
       "sprintId": "sprint-13",
@@ -315,7 +315,7 @@
         }
       ],
       "createdAt": "2026-07-28T08:30:00Z",
-      "updatedAt": "2026-07-30T10:26:34.139Z"
+      "updatedAt": "2026-08-01T05:16:55.597Z"
     },
     {
       "id": "tm-5",

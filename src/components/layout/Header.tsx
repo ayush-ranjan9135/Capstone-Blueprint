@@ -60,10 +60,8 @@ export function Header() {
 
   return (
     <header className="h-14 flex items-center px-6 gap-4 flex-shrink-0 bg-surface border-b border-border-subtle sticky top-0 z-40">
-      {/* Page title */}
       <h2 className="font-semibold text-sm text-primary">{pageTitle}</h2>
 
-      {/* Search */}
       <div className="flex-1 max-w-md ml-8">
         <div className="flex items-center gap-2 px-4 py-2 rounded-xl cursor-text transition-all duration-300 bg-black/5 dark:bg-white/5 border border-transparent hover:border-border-strong focus-within:!border-brand focus-within:!bg-surface focus-within:shadow-[0_0_15px_rgba(var(--brand-rgb),0.1)]">
           <Search size={15} className="text-muted flex-shrink-0" />
@@ -79,7 +77,6 @@ export function Header() {
       </div>
 
       <div className="ml-auto flex items-center gap-2">
-        {/* Theme toggle */}
         <button
           onClick={toggleTheme}
           className="w-9 h-9 flex items-center justify-center rounded-xl text-muted hover:text-primary hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
@@ -88,7 +85,6 @@ export function Header() {
           {mounted ? (isDarkMode ? <Sun size={17} /> : <Moon size={17} />) : <div className="w-4 h-4" />}
         </button>
 
-        {/* Notifications */}
         <button 
           onClick={() => router.push('/notifications')}
           className="w-9 h-9 flex items-center justify-center rounded-xl text-muted hover:text-primary hover:bg-black/5 dark:hover:bg-white/10 transition-colors relative"
@@ -100,7 +96,6 @@ export function Header() {
 
         <div className="w-px h-6 bg-border-subtle mx-2" />
 
-        {/* Avatar Dropdown */}
         <div className="relative" ref={dropdownRef}>
           <button 
             onClick={() => setProfileOpen(!profileOpen)}

@@ -1,6 +1,6 @@
 'use client';
 
-import { type Task } from '@/stores/taskStore';
+import type { Task } from '@/types';
 import { Calendar, GripVertical, CheckCircle2 } from 'lucide-react';
 
 const priorityConfig: Record<string, { colorClass: string; glowClass: string; label: string }> = {
