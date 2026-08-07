@@ -18,7 +18,9 @@ export function Sidebar() {
   const { sidebarOpen, toggleSidebar } = useUIStore();
 
   const handleLogout = async () => {
-    await signOut(auth);
+    if (auth) {
+      await signOut(auth);
+    }
     clearAuth();
     router.push('/login');
   };

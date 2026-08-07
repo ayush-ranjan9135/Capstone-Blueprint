@@ -132,7 +132,7 @@ export function Header() {
                 <button 
                   onClick={async () => {
                     setProfileOpen(false);
-                    await signOut(auth);
+                    if (auth) await signOut(auth);
                     clearAuth();
                     router.push('/login');
                   }} 

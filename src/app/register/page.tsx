@@ -47,6 +47,7 @@ export default function RegisterPage() {
 
   const onSubmit = async (data: RegisterFormValues) => {
     try {
+      if (!auth) throw new Error('Firebase Auth is not initialized. Check your environment variables.');
       const userCredential = await createUserWithEmailAndPassword(auth, data.email, data.password)
       if (userCredential.user) {
         await updateProfile(userCredential.user, {

@@ -16,6 +16,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
 
   useEffect(() => {
+    if (!auth) {
+      setAuth(null)
+      return
+    }
+
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setAuth(user)
       

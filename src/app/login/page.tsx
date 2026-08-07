@@ -41,6 +41,7 @@ export default function LoginPage() {
   const onSubmit = async (data: LoginFormValues) => {
     try {
       logger.info('Attempting user login', { email: data.email })
+      if (!auth) throw new Error('Firebase Auth is not initialized. Check your environment variables.');
       const userCredential = await signInWithEmailAndPassword(auth, data.email, data.password)
       if (userCredential.user) {
         logger.info('User login successful', { uid: userCredential.user.uid })
