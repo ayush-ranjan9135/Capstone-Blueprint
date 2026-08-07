@@ -27,7 +27,7 @@ export default function DashboardPage() {
       {/* Greeting */}
       <div>
         <h1 className="text-3xl font-bold text-primary tracking-tight pb-1">
-          {greeting}, {user?.name?.split(' ')[0]} 👋
+          {greeting}, {user?.displayName?.split(' ')[0] || 'User'} 👋
         </h1>
         <p className="text-sm mt-1 text-secondary font-medium">
           Here&apos;s what&apos;s happening in your workspace today.

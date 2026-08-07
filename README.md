@@ -1,94 +1,94 @@
 <div align="center">
-  <h1>✨ TaskMatrix 🚀</h1>
-  <p><strong>A Modern, High-Performance Task & Project Management Dashboard</strong></p>
+  <img src="public/noise.svg" alt="TaskMatrix Banner" width="100%" height="200" style="object-fit: cover; border-radius: 10px;" />
 
-  <!-- Badges -->
+  <h1>🚀 TaskMatrix</h1>
+  <p><strong>The all-in-one agile workspace for modern teams.</strong></p>
+
   <p>
-    <img src="https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white" alt="Next.js" />
-    <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
-    <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS" />
-    <img src="https://img.shields.io/badge/Zustand-4A3B32?style=for-the-badge&logo=zustand&logoColor=white" alt="Zustand" />
-    <img src="https://img.shields.io/badge/Framer_Motion-0055FF?style=for-the-badge&logo=framer&logoColor=white" alt="Framer Motion" />
+    <img src="https://img.shields.io/badge/Next.js-16.x-black?style=for-the-badge&logo=next.js" alt="Next.js" />
+    <img src="https://img.shields.io/badge/React-19-blue?style=for-the-badge&logo=react" alt="React" />
+    <img src="https://img.shields.io/badge/Tailwind_CSS-4.x-38B2AC?style=for-the-badge&logo=tailwind-css" alt="Tailwind CSS" />
+    <img src="https://img.shields.io/badge/Firebase-Auth-FFCA28?style=for-the-badge&logo=firebase" alt="Firebase" />
+    <img src="https://img.shields.io/badge/Zustand-State-black?style=for-the-badge" alt="Zustand" />
   </p>
 </div>
 
-<br />
+---
 
 ## 🎯 Problem Statement
-In fast-paced work environments, teams and individuals often struggle to keep track of disjointed tasks, unorganized deadlines, and scattered project files. Existing tools are either too complex (overwhelming users with unnecessary features) or too simple (lacking the depth needed for real project management). This leads to decreased productivity, missed deadlines, and a frustrating user experience.
+
+Modern engineering and product teams often struggle with fragmented workflows. Task tracking, sprint planning, and team collaboration frequently happen across multiple disparate tools. This fragmentation leads to:
+- 📉 Decreased productivity due to context switching.
+- 🌫️ Lack of visibility into project status and bottlenecks.
+- ⏱️ Inefficient sprint planning and tracking.
+- 🎨 Poor user experience with legacy enterprise software.
 
 ## 💡 Solution
-**TaskMatrix** is designed to bridge the gap. It provides a sleek, beautifully animated, and highly intuitive dashboard that centralizes project tracking, personal tasks, and team notifications. By focusing on a frictionless user experience with premium aesthetics and lightning-fast performance, TaskMatrix helps users organize their workflow effortlessly.
+
+**TaskMatrix** is a unified, agile project management platform designed to solve these issues. It brings Kanban boards, sprint management, and real-time collaboration into a single, cohesive, and lightning-fast interface. 
+
+With a premium glassmorphic UI, dynamic interactions, and robust state management, TaskMatrix ensures that managing work feels intuitive, seamless, and visually stunning.
 
 ---
 
-## 🌊 Flow of the Project
-1. **Authentication:** Users log in securely to access their personalized workspace.
-2. **Dashboard Overview:** Upon login, users are greeted by a centralized dashboard displaying their active tasks, project progress, and an activity feed of recent updates.
-3. **Task & Project Management:** Users can navigate to dedicated sections (Tasks, Calendar, Projects) to drill down into specifics.
-4. **Interactive Settings:** Users can fully customize their experience (Dark/Light mode, Notifications, Security settings) via a dynamic, interactive settings menu.
-5. **Real-time Notifications:** The system provides immediate feedback and updates through an integrated notification center.
+## 🛠️ Tech Stack & Architecture
+
+TaskMatrix is built on a modern, highly scalable architecture using the latest web technologies.
+
+### 🏗️ Architecture Overview
+
+The application follows a standard modular frontend architecture within the Next.js App Router paradigm:
+
+- **`src/app/`**: Next.js App Router for server/client page routing and layouts (e.g., Auth pages, Dashboard).
+- **`src/components/`**: Reusable UI components (Forms, Buttons, Layout wrappers).
+- **`src/lib/`**: Core utilities, API clients, and third-party integrations (e.g., Firebase initialization).
+- **`src/stores/`**: Global state management using Zustand (e.g., Authentication state, Theme state).
+- **`src/types/`**: TypeScript type definitions and Zod schemas for robust validation.
+
+### 💻 Technologies Used
+
+| Category | Technology | Description |
+| :--- | :--- | :--- |
+| **Framework** | Next.js 16.x | React framework for robust SSR and Client-side rendering. |
+| **UI/Styling** | Tailwind CSS v4 | Utility-first CSS framework for rapid, custom design. |
+| **State Management**| Zustand | Small, fast, scalable barebones state management. |
+| **Authentication**| Firebase Auth | Secure, reliable user authentication (Email/Password). |
+| **Animations** | Framer Motion | Production-ready declarative animations. |
+| **Forms & Validation**| react-hook-form + Zod | Performant, flexible, and extensible forms with strict schema validation. |
+| **Icons** | Lucide React | Beautiful, consistent open-source icons. |
 
 ---
 
-## 🏛️ Architecture
-TaskMatrix leverages a modern decoupled architecture, optimizing for speed, maintainability, and scalability.
+## 🔄 Application Flow
 
-- **Frontend (Client):** Built with **Next.js (App Router)** and **React 19**. It utilizes Server-Side Rendering (SSR) for initial load performance and Client-Side Routing for a seamless SPA-like feel.
-- **State Management:** **Zustand** is used for lightweight, globally accessible state management (handling UI themes, User Auth, and layout toggles) without the boilerplate of Redux.
-- **Styling & UI:** **Tailwind CSS v4** handles responsive, utility-first styling. **Framer Motion** orchestrates complex micro-interactions and layout transitions (like the active state pills in the sidebar).
-- **Form Handling:** **React Hook Form** paired with **Zod** ensures robust, strictly-typed data validation before any API submissions.
-- **Mock Backend:** Currently powered by **JSON Server** to simulate a REST API environment (`dev:api`), running concurrently with the Next.js development server.
-
----
-
-## 🛠️ Tech Stack
-
-### Core
-- ⚛️ **React 19** & **Next.js 16** (App Router)
-- 📘 **TypeScript** (Strict Type Safety)
-
-### Styling & UI
-- 🎨 **Tailwind CSS 4** (Utility-first CSS)
-- 💫 **Framer Motion** (Animations & Transitions)
-- 💠 **Lucide React** (Beautiful consistent iconography)
-- 🧩 **clsx** & **tailwind-merge** (Dynamic class management)
-
-### State & Data Fetching
-- 🐻 **Zustand** (Global State)
-- 📡 **Axios** (HTTP Client)
-- 📝 **React Hook Form** + **Zod** (Form Validation)
-
-### Development & Tooling
-- ⚙️ **JSON Server** (REST API Mocking)
-- 🔄 **Concurrently** (Running UI & API together)
-- 🧹 **ESLint** (Code Linting)
+```mermaid
+graph TD
+    A[User Visits Site] --> B{Is Authenticated?}
+    B -->|No| C[Login / Register Page]
+    C --> D[Firebase Auth Validation]
+    D -->|Success| E[Update Zustand AuthStore]
+    D -->|Failure| F[Show Toast Notification]
+    F --> C
+    E --> G[Redirect to Dashboard]
+    B -->|Yes| G[Dashboard / Kanban Boards]
+    G --> H[Interact with Tasks]
+    H --> I[Update Local State]
+    I --> J[Sync with Backend]
+```
 
 ---
 
-## 🚀 Getting Started
+## 📬 Contact & Let's Connect!
 
-To run this project locally:
+Feel free to reach out if you have any questions, want to collaborate, or just want to say hi!
 
-1. **Install dependencies:**
-   ```bash
-   npm install
-   ```
+- 🌐 **Portfolio**: [alpha-portfolio-five.vercel.app](https://alpha-portfolio-five.vercel.app/)
+- 💼 **LinkedIn**: [Ayush Ranjan](https://www.linkedin.com/in/ayush-ranjan-9135d3/)
+- 🐙 **GitHub**: [ayush-ranjan9135](https://github.com/ayush-ranjan9135)
+- 📸 **Instagram**: [@ayush.__.srivastava](https://www.instagram.com/ayush.__.srivastava?igsh=dW1zdHFjcTZnenV2)
+- 📘 **Facebook**: [Ayush Ranjan](https://www.facebook.com/share/1AhB4q1WeW/)
 
-2. **Start the development servers (Frontend + API):**
-   ```bash
-   npm run dev:all
-   ```
-   *The frontend will run on `http://localhost:3000` and the API on `http://localhost:3001`.*
-
----
-
-## 📬 Contact & Links
-
-Feel free to reach out or check out more of my work!
-
-- 🌐 **Portfolio:** [Alpha Portfolio](https://alpha-portfolio-five.vercel.app/)
-- 🐙 **GitHub:** [ayush-ranjan9135](https://github.com/ayush-ranjan9135)
-- 💼 **LinkedIn:** [Ayush Ranjan](https://www.linkedin.com/in/ayush-ranjan-9135d3/)
-- 📸 **Instagram:** [@ayush.__.srivastava](https://www.instagram.com/ayush.__.srivastava?igsh=dW1zdHFjcTZnenV2)
-- 📘 **Facebook:** [Ayush's Profile](https://www.facebook.com/share/1AhB4q1WeW/)
+<br/>
+<div align="center">
+  <sub>Built with ❤️ by Ayush Ranjan.</sub>
+</div>

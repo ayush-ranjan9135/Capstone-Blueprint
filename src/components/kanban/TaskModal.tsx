@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { useTaskStore } from '@/stores/taskStore';
-import type { Task, TaskStatus, Priority } from '@/types';
-import { X, Trash2, Calendar, Tag, User, AlignLeft, CheckSquare, Square } from 'lucide-react';
+import type { TaskStatus, Priority } from '@/types';
+import { X, Trash2, Calendar, Tag, AlignLeft, CheckSquare, Square } from 'lucide-react';
 
 const statusOptions: { value: TaskStatus; label: string; textClass: string }[] = [
   { value: 'backlog', label: 'Backlog', textClass: 'text-muted' },
@@ -38,17 +38,21 @@ export function TaskModal({ open, onClose }: TaskModalProps) {
 
   useEffect(() => {
     if (selectedTask) {
-      setTitle(selectedTask.title);
-      setDescription(selectedTask.description || '');
-      setStatus(selectedTask.status);
-      setPriority(selectedTask.priority);
-      setDueDate(selectedTask.dueDate || '');
-      setStoryPoints(selectedTask.storyPoints?.toString() || '');
-      setSubtasks(selectedTask.subtasks || []);
+      setTimeout(() => {
+        setTitle(selectedTask.title);
+        setDescription(selectedTask.description || '');
+        setStatus(selectedTask.status);
+        setPriority(selectedTask.priority);
+        setDueDate(selectedTask.dueDate || '');
+        setStoryPoints(selectedTask.storyPoints?.toString() || '');
+        setSubtasks(selectedTask.subtasks || []);
+      }, 0);
     } else {
-      setTitle(''); setDescription(''); setStatus('todo');
-      setPriority('medium'); setDueDate(''); setStoryPoints('');
-      setSubtasks([]);
+      setTimeout(() => {
+        setTitle(''); setDescription(''); setStatus('todo');
+        setPriority('medium'); setDueDate(''); setStoryPoints('');
+        setSubtasks([]);
+      }, 0);
     }
   }, [selectedTask, open]);
 

@@ -149,7 +149,7 @@ export default function NotificationsPage() {
             </div>
             <h3 className="text-lg font-bold text-primary">All caught up!</h3>
             <p className="text-sm text-secondary mt-2 max-w-sm">
-              You don't have any new notifications right now. Check back later for updates on your tasks and projects.
+              You don&apos;t have any new notifications right now. Check back later for updates on your tasks and projects.
             </p>
           </div>
         )}

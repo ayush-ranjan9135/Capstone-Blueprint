@@ -1,8 +1,10 @@
 'use client';
 
-import { Search, Bell, Moon, Sun } from 'lucide-react';
 import { useThemeStore } from '@/stores/themeStore';
 import { useAuthStore } from '@/stores/authStore';
+import { auth } from '@/lib/firebase/client';
+import { signOut } from 'firebase/auth';
+import { Search, Bell, Moon, Sun } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
@@ -22,7 +24,7 @@ export function Header() {
   const pathname = usePathname();
   const router = useRouter();
   const { theme, setTheme, initializeTheme } = useThemeStore();
-  const { user, logout } = useAuthStore();
+  const { user, clearAuth } = useAuthStore();
   const pageTitle = pageTitles[pathname] || 'TaskMatrix';
   
   // Prevent hydration mismatch on theme icon
@@ -43,7 +45,7 @@ export function Header() {
 
   useEffect(() => {
     initializeTheme();
-    setMounted(true);
+    setTimeout(() => setMounted(true), 0);
   }, [initializeTheme]);
 
   const toggleTheme = () => {
@@ -101,7 +103,7 @@ export function Header() {
             onClick={() => setProfileOpen(!profileOpen)}
             className="w-9 h-9 rounded-full flex items-center justify-center text-[13px] font-bold cursor-pointer bg-gradient-to-tr from-brand to-brand-hover text-white shadow-md ring-2 ring-transparent hover:ring-brand-muted hover:scale-105 transition-all outline-none"
           >
-            {user?.name?.[0] || 'U'}
+            {user?.displayName?.[0] || user?.email?.[0]?.toUpperCase() || 'U'}
           </button>
           
           <AnimatePresence>
@@ -114,7 +116,7 @@ export function Header() {
                 className="absolute right-0 mt-3 w-56 glass-panel p-2 shadow-xl origin-top-right z-50 flex flex-col gap-1"
               >
                 <div className="px-3 py-2 border-b border-border-subtle mb-1">
-                  <p className="text-sm font-semibold text-primary truncate">{user?.name || 'User'}</p>
+                  <p className="text-sm font-semibold text-primary truncate">{user?.displayName || 'User'}</p>
                   <p className="text-xs text-muted truncate">{user?.email || 'user@example.com'}</p>
                 </div>
                 
@@ -128,9 +130,10 @@ export function Header() {
                 <div className="border-t border-border-subtle my-1" />
                 
                 <button 
-                  onClick={() => {
+                  onClick={async () => {
                     setProfileOpen(false);
-                    logout();
+                    await signOut(auth);
+                    clearAuth();
                     router.push('/login');
                   }} 
                   className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-error hover:bg-error-bg transition-colors text-left"

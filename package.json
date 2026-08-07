@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --port 3000",
-    "dev:api": "json-server --watch db.json --port 3001",
+    "dev:api": "json-server --watch db.json --host 127.0.0.1 --port 3001",
     "dev:all": "concurrently --names \"NEXT,API\" --prefix-colors \"cyan,magenta\" \"npm run dev\" \"npm run dev:api\"",
     "build": "next build",
     "start": "next start",
@@ -14,12 +14,14 @@
     "@hookform/resolvers": "^5.5.7",
     "axios": "^1.19.0",
     "clsx": "^2.1.1",
+    "firebase": "^12.17.1",
     "framer-motion": "^12.43.0",
     "lucide-react": "^1.27.0",
     "next": "16.2.12",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "react-hook-form": "^7.83.0",
+    "react-hot-toast": "^2.6.0",
     "tailwind-merge": "^3.6.0",
     "zod": "^3.25.76",
     "zustand": "^5.0.14"

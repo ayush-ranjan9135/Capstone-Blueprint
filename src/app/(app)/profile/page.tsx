@@ -19,7 +19,7 @@ export default function ProfilePage() {
         <div className="flex items-start gap-8">
           <div className="flex flex-col items-center gap-4">
             <div className="w-24 h-24 rounded-2xl flex items-center justify-center text-4xl font-bold text-white gradient-bg shadow-[0_0_20px_rgba(147,51,234,0.3)] ring-4 ring-base/50">
-              {user.name[0]}
+              {user?.displayName?.[0] || user?.email?.[0]?.toUpperCase() || 'U'}
             </div>
             <button className="text-xs font-bold px-4 py-2 rounded-lg bg-overlay hover:bg-border-subtle text-primary transition-all duration-200 border border-border-strong hover:border-brand-muted hover:shadow-[0_0_10px_rgba(99,102,241,0.2)]">
               Change Avatar
@@ -32,7 +32,7 @@ export default function ProfilePage() {
                 <label className="text-[11px] font-bold text-secondary uppercase tracking-widest mb-2 block">Full Name</label>
                 <div className="relative group">
                   <User size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted group-focus-within:text-brand transition-colors" />
-                  <input type="text" defaultValue={user.name} 
+                  <input type="text" defaultValue={user?.displayName || ''} 
                     className="w-full pl-10 pr-4 py-3 glass-input rounded-xl text-sm text-primary font-medium focus:outline-none" />
                 </div>
               </div>
@@ -41,7 +41,7 @@ export default function ProfilePage() {
                 <label className="text-[11px] font-bold text-secondary uppercase tracking-widest mb-2 block">Email Address</label>
                 <div className="relative group">
                   <Mail size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted group-focus-within:text-brand transition-colors" />
-                  <input type="email" defaultValue={user.email} 
+                  <input type="email" defaultValue={user?.email || ''} 
                     className="w-full pl-10 pr-4 py-3 glass-input rounded-xl text-sm text-primary font-medium focus:outline-none" />
                 </div>
               </div>

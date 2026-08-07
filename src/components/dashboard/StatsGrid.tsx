@@ -1,7 +1,7 @@
 'use client';
 
 import { useTaskStore } from '@/stores/taskStore';
-import { CheckSquare, Clock, TrendingUp, AlertCircle } from 'lucide-react';
+import { CheckSquare, TrendingUp, AlertCircle } from 'lucide-react';
 
 export function StatsGrid() {
   const { tasks } = useTaskStore();

@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { Task, TaskStatus, Priority, Subtask, Comment } from '@/types';
+import type { Task, TaskStatus, Priority } from '@/types';
 
 interface TaskFilters {
   status?: TaskStatus;

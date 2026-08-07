@@ -61,7 +61,7 @@ export default function SettingsPage() {
                 ].map(t => (
                   <div 
                     key={t.id}
-                    onClick={() => setTheme(t.id as any)}
+                    onClick={() => setTheme(t.id as "light" | "dark" | "system")}
                     className={`cursor-pointer rounded-xl border-2 p-4 flex flex-col items-center gap-3 transition-all ${
                       theme === t.id 
                         ? 'border-brand bg-brand/5' 

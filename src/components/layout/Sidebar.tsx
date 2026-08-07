@@ -12,11 +12,12 @@ import { NAV_ITEMS, BOTTOM_NAV_ITEMS } from '@/lib/constants';
 export function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
-  const { user, logout } = useAuthStore();
+  const { user, clearAuth } = useAuthStore();
   const { sidebarOpen, toggleSidebar } = useUIStore();
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await signOut(auth);
+    clearAuth();
     router.push('/login');
   };
 
@@ -121,12 +122,12 @@ export function Sidebar() {
         {/* User / logout */}
         <div className="flex items-center gap-3 px-2.5 py-2 rounded-lg border-t border-border-subtle mt-1 pt-3">
           <div className="w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-semibold bg-brand text-white shadow-sm">
-            {user?.name?.[0] || 'U'}
+            {user?.displayName?.[0] || user?.email?.[0]?.toUpperCase() || 'U'}
           </div>
           {sidebarOpen && (
             <>
               <div className="flex-1 min-w-0">
-                <p className="text-xs font-medium text-primary truncate">{user?.name}</p>
+                <p className="text-sm font-semibold text-primary truncate">{user?.displayName || 'User'}</p>
                 <p className="text-xs text-muted truncate">{user?.role}</p>
               </div>
               <button onClick={handleLogout} className="rounded-md p-1.5 text-muted hover:text-error hover:bg-error-bg transition-colors">
