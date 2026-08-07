@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { LogOut, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useAuthStore } from '@/stores/authStore';
+import { signOut } from 'firebase/auth';
+import { auth } from '@/lib/firebase/client';
 import { useUIStore } from '@/stores/uiStore';
 import { motion, AnimatePresence } from 'framer-motion';
 import { NAV_ITEMS, BOTTOM_NAV_ITEMS } from '@/lib/constants';
@@ -128,7 +130,7 @@ export function Sidebar() {
             <>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-semibold text-primary truncate">{user?.displayName || 'User'}</p>
-                <p className="text-xs text-muted truncate">{user?.role}</p>
+                <p className="text-xs text-muted truncate">User</p>
               </div>
               <button onClick={handleLogout} className="rounded-md p-1.5 text-muted hover:text-error hover:bg-error-bg transition-colors">
                 <LogOut size={14} />

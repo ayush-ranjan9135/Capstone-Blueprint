@@ -50,7 +50,7 @@ export default function ProfilePage() {
                 <label className="text-[11px] font-bold text-secondary uppercase tracking-widest mb-2 block">Role</label>
                 <div className="relative">
                   <Shield size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted/70" />
-                  <input type="text" defaultValue={user.role} readOnly
+                  <input type="text" defaultValue="User" readOnly
                     className="w-full pl-10 pr-4 py-3 bg-overlay/50 border border-border-subtle rounded-xl text-sm text-muted/80 font-medium cursor-not-allowed opacity-80" />
                 </div>
               </div>

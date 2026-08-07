@@ -12,8 +12,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setAuth(user)
+      
+      if (user) {
+        const token = await user.getIdToken()
+        document.cookie = `firebase-auth-token=${token}; path=/; max-age=3600; SameSite=Strict`
+      } else {
+        document.cookie = `firebase-auth-token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT`
+      }
       
       const isAuthRoute = pathname === '/login' || pathname === '/register'
       if (!user && !isAuthRoute && pathname !== '/') {

@@ -44,9 +44,9 @@ export function MyTasksList() {
 
   const myTasks = useMemo(() => {
     return tasks
-      .filter((t) => t.assigneeId === user?.id && t.status !== 'done')
+      .filter((t) => t.assigneeId === user?.uid && t.status !== 'done')
       .slice(0, 6);
-  }, [tasks, user?.id]);
+  }, [tasks, user?.uid]);
 
   return (
     <div className="glass-panel p-6 shadow-md transition-all duration-300 hover:shadow-lg">
