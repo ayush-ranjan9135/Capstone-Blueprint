@@ -59,6 +59,27 @@ The application follows a standard modular frontend architecture within the Next
 
 ---
 
+## 📐 Low-Level Design (LLD)
+
+The Low-Level Design focuses on the specific implementation details of the application's core modules.
+
+### 1. Component Architecture
+TaskMatrix uses a modular component structure optimized for Next.js App Router:
+- **Server vs Client Components**: Most interactive UI elements (forms, boards) use `"use client"` directives, while layout wrappers remain server components for performance.
+- **Composition**: Complex views (like the Kanban board) are broken down into granular components (`BoardColumn`, `TaskCard`, `TaskModal`).
+
+### 2. State Management Strategy
+Global state is managed via **Zustand**, split into logical stores to prevent unnecessary re-renders:
+- `authStore.ts`: Manages user sessions, authentication status (`isAuthenticated`), and user metadata.
+- `taskStore.ts`: Handles the local state of tasks, columns, and drag-and-drop actions before syncing with the backend.
+
+### 3. Authentication Flow (Firebase)
+Authentication is decoupled from the UI using a custom wrapper:
+- **`AuthProvider`**: A higher-order component that listens to `onAuthStateChanged` from Firebase. It injects the user session into `authStore` and handles protected route redirects.
+- **Zod Validation**: Forms are strictly typed using Zod schemas (`loginSchema`, `registerSchema`) before any Firebase API call is made.
+
+---
+
 ## 🔄 Application Flow
 
 ```mermaid
