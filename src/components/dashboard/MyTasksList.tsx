@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+
 import { useTaskStore } from '@/stores/taskStore';
 import { useAuthStore } from '@/stores/authStore';
 import { CheckSquare, Calendar, ArrowRight } from 'lucide-react';
@@ -39,14 +39,10 @@ function TaskListItem({ task, onComplete }: { task: Task; onComplete: (id: strin
 }
 
 export function MyTasksList() {
-  const { tasks, updateTaskStatus } = useTaskStore();
+  const { getRecentTasks, updateTaskStatus } = useTaskStore();
   const { user } = useAuthStore();
 
-  const myTasks = useMemo(() => {
-    return tasks
-      .filter((t) => t.assigneeId === user?.uid && t.status !== 'done')
-      .slice(0, 6);
-  }, [tasks, user?.uid]);
+  const myTasks = !user?.uid ? [] : getRecentTasks(user.uid, 6);
 
   return (
     <div className="glass-panel p-6 shadow-md transition-all duration-300 hover:shadow-lg">

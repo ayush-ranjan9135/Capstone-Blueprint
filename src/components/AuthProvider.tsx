@@ -6,6 +6,10 @@ import { useAuthStore } from '@/stores/authStore'
 import { onAuthStateChanged } from 'firebase/auth'
 import { useRouter, usePathname } from 'next/navigation'
 
+import { AUTH_COOKIE_NAME, ROUTES } from '@/lib/constants'
+
+import { logger } from '@/lib/logger'
+
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const { setAuth, isLoading } = useAuthStore()
   const router = useRouter()
@@ -15,18 +19,26 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setAuth(user)
       
-      if (user) {
-        const token = await user.getIdToken()
-        document.cookie = `firebase-auth-token=${token}; path=/; max-age=3600; SameSite=Strict`
-      } else {
-        document.cookie = `firebase-auth-token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT`
+      try {
+        if (user) {
+          const token = await user.getIdToken()
+          document.cookie = `${AUTH_COOKIE_NAME}=${token}; path=/; max-age=3600; SameSite=Strict`
+          logger.info('User session active', { uid: user.uid })
+        } else {
+          document.cookie = `${AUTH_COOKIE_NAME}=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT`
+          logger.info('User session cleared')
+        }
+      } catch (error) {
+        logger.error('Failed to sync auth cookie', { error: String(error) })
       }
       
-      const isAuthRoute = pathname === '/login' || pathname === '/register'
-      if (!user && !isAuthRoute && pathname !== '/') {
-        router.push('/login')
+      const isAuthRoute = pathname === ROUTES.LOGIN || pathname === ROUTES.REGISTER
+      if (!user && !isAuthRoute && pathname !== ROUTES.HOME) {
+        logger.info('Redirecting unauthenticated user to login', { pathname })
+        router.push(ROUTES.LOGIN)
       } else if (user && isAuthRoute) {
-        router.push('/dashboard')
+        logger.info('Redirecting authenticated user to dashboard')
+        router.push(ROUTES.DASHBOARD)
       }
     })
 
@@ -35,7 +47,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      {isLoading && pathname !== '/login' && pathname !== '/register' ? (
+      {isLoading && pathname !== ROUTES.LOGIN && pathname !== ROUTES.REGISTER ? (
         <div className="min-h-screen flex items-center justify-center bg-base text-primary">
           <div className="w-8 h-8 border-4 border-brand border-t-transparent rounded-full animate-spin"></div>
         </div>

@@ -1,5 +1,7 @@
 import { create } from 'zustand';
 import type { Task, TaskStatus, Priority } from '@/types';
+import { fetchWithRetry } from '@/lib/network';
+import { logger } from '@/lib/logger';
 
 interface TaskFilters {
   status?: TaskStatus;
@@ -8,21 +10,42 @@ interface TaskFilters {
   search?: string;
 }
 
+/**
+ * Global state management for Tasks using Zustand.
+ * Handles fetching, creating, updating, and filtering tasks,
+ * interacting directly with the backend API or managing local state during the MVP.
+ */
 interface TaskState {
+  /** The master array of all loaded tasks in the system. */
   tasks: Task[];
+  /** The currently selected task for detailed viewing or editing. */
   selectedTask: Task | null;
+  /** Active filters applied to the task list (e.g., status, search query). */
   filters: TaskFilters;
+  /** Indicates if a network request is actively fetching or mutating tasks. */
   isLoading: boolean;
+  /** Holds the latest error message if a network request fails. */
   error: string | null;
+  /** Fetches all tasks, optionally constrained by a projectId. */
   fetchTasks: (projectId?: string) => Promise<void>;
+  /** Creates a new task and optimistically adds it to the local store. */
   createTask: (data: Partial<Task>) => Promise<void>;
+  /** Updates an existing task and optimistically applies the change locally. */
   updateTask: (id: string, data: Partial<Task>) => Promise<void>;
+  /** Convenience method for moving a task between Kanban columns. */
   updateTaskStatus: (id: string, status: TaskStatus) => Promise<void>;
+  /** Deletes a task by ID and optimistically removes it locally. */
   deleteTask: (id: string) => Promise<void>;
+  /** Sets the active task for the detail modal. */
   selectTask: (task: Task | null) => void;
+  /** Merges new filters with existing ones to refine the task view. */
   setFilters: (filters: Partial<TaskFilters>) => void;
+  /** Returns a subset of tasks matching a specific status (e.g., 'todo'). */
   getTasksByStatus: (status: TaskStatus) => Task[];
+  /** Returns tasks filtered by the globally active `filters` object. */
   getFilteredTasks: () => Task[];
+  /** Returns a limited subset of recent tasks assigned to a specific user. */
+  getRecentTasks: (userId: string, limit: number) => Task[];
 }
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
@@ -40,11 +63,13 @@ export const useTaskStore = create<TaskState>()((set, get) => ({
       const url = projectId
         ? `${API_URL}/tasks?projectId=${projectId}`
         : `${API_URL}/tasks`;
-      const res = await fetch(url);
+      const res = await fetchWithRetry(url);
       const tasks: Task[] = await res.json();
       set({ tasks, isLoading: false });
-    } catch {
+      logger.info('Tasks fetched successfully', { count: tasks.length });
+    } catch (error) {
       set({ error: 'Failed to fetch tasks', isLoading: false });
+      logger.error('Failed to fetch tasks', { error: String(error) });
     }
   },
 
@@ -63,14 +88,16 @@ export const useTaskStore = create<TaskState>()((set, get) => ({
         updatedAt: new Date().toISOString(),
         ...data,
       };
-      await fetch(`${API_URL}/tasks`, {
+      await fetchWithRetry(`${API_URL}/tasks`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newTask),
       });
       set((state) => ({ tasks: [...state.tasks, newTask] }));
-    } catch {
+      logger.info('Task created successfully', { taskId: newTask.id });
+    } catch (error) {
       set({ error: 'Failed to create task' });
+      logger.error('Failed to create task', { error: String(error) });
     }
   },
 
@@ -82,13 +109,15 @@ export const useTaskStore = create<TaskState>()((set, get) => ({
       ),
     }));
     try {
-      await fetch(`${API_URL}/tasks/${id}`, {
+      await fetchWithRetry(`${API_URL}/tasks/${id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...data, updatedAt: new Date().toISOString() }),
       });
-    } catch {
+      logger.info('Task updated successfully', { taskId: id });
+    } catch (error) {
       set({ tasks: prevTasks, error: 'Failed to update task' });
+      logger.error('Failed to update task', { error: String(error), taskId: id });
     }
   },
 
@@ -100,9 +129,11 @@ export const useTaskStore = create<TaskState>()((set, get) => ({
     const prevTasks = get().tasks;
     set((state) => ({ tasks: state.tasks.filter((t) => t.id !== id) }));
     try {
-      await fetch(`${API_URL}/tasks/${id}`, { method: 'DELETE' });
-    } catch {
+      await fetchWithRetry(`${API_URL}/tasks/${id}`, { method: 'DELETE' });
+      logger.info('Task deleted successfully', { taskId: id });
+    } catch (error) {
       set({ tasks: prevTasks, error: 'Failed to delete task' });
+      logger.error('Failed to delete task', { error: String(error), taskId: id });
     }
   },
 
@@ -126,4 +157,12 @@ export const useTaskStore = create<TaskState>()((set, get) => ({
       return true;
     });
   },
+
+  getRecentTasks: (userId: string, limit: number) => {
+    // TODO (Scalability): Move this logic to the backend using Firebase query pagination 
+    // e.g., query(collection, where('assigneeId', '==', userId), limit(6))
+    return get().tasks
+      .filter((t) => t.assigneeId === userId && t.status !== 'done')
+      .slice(0, limit);
+  }
 }));

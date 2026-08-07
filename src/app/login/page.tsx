@@ -12,6 +12,7 @@ import Link from 'next/link'
 import { Eye, EyeOff, Loader2, ArrowRight, CheckCircle2, LayoutDashboard, Users, Zap } from 'lucide-react'
 import { motion } from 'framer-motion'
 import toast from 'react-hot-toast'
+import { logger } from '@/lib/logger'
 
 const loginSchema = z.object({
   email: z.string().email({ message: 'Please enter a valid email address' }),
@@ -39,13 +40,16 @@ export default function LoginPage() {
 
   const onSubmit = async (data: LoginFormValues) => {
     try {
+      logger.info('Attempting user login', { email: data.email })
       const userCredential = await signInWithEmailAndPassword(auth, data.email, data.password)
       if (userCredential.user) {
+        logger.info('User login successful', { uid: userCredential.user.uid })
         setAuth(userCredential.user)
         router.push('/dashboard')
       }
     } catch (err: unknown) {
       const e = err as Error
+      logger.error('User login failed', { error: e.message, email: data.email })
       toast.error(e.message || 'An unexpected error occurred')
     }
   }
@@ -139,7 +143,7 @@ export default function LoginPage() {
               Welcome back
             </h2>
             <p className="mt-2 text-sm text-gray-400">
-              Don't have an account?{' '}
+              Don&apos;t have an account?{' '}
               <Link href="/register" className="font-medium text-purple-400 hover:text-purple-300 transition-colors">
                 Create one now
               </Link>

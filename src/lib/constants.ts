@@ -26,3 +26,12 @@ export const BOTTOM_NAV_ITEMS = [
   { href: '/profile', icon: User, label: 'Profile' },
   { href: '/settings', icon: Settings, label: 'Settings' },
 ];
+
+export const AUTH_COOKIE_NAME = 'firebase-auth-token';
+
+export const ROUTES = {
+  HOME: '/',
+  LOGIN: '/login',
+  REGISTER: '/register',
+  DASHBOARD: '/dashboard',
+};
