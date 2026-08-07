@@ -28,6 +28,7 @@ export const BOTTOM_NAV_ITEMS = [
 ];
 
 export const AUTH_COOKIE_NAME = 'firebase-auth-token';
+export const DASHBOARD_TASK_LIMIT = 6;
 
 export const ROUTES = {
   HOME: '/',

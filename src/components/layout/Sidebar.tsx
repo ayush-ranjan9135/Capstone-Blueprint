@@ -11,6 +11,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { NAV_ITEMS, BOTTOM_NAV_ITEMS } from '@/lib/constants';
 
 
+/**
+ * The main application sidebar for navigation.
+ * Manages the collapsible state, displays navigation links, and provides user logout functionality.
+ * Renders dynamically based on `sidebarOpen` state from `useUIStore`.
+ */
 export function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();

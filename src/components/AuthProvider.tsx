@@ -10,6 +10,11 @@ import { AUTH_COOKIE_NAME, ROUTES } from '@/lib/constants'
 
 import { logger } from '@/lib/logger'
 
+/**
+ * Global Authentication Provider that syncs Firebase Auth state with Zustand and manages route guards.
+ * It listens to onAuthStateChanged to set the user state and a secure HTTP-only-like cookie.
+ * It also handles automatic redirection between public (login/register) and protected (dashboard) routes.
+ */
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const { setAuth, isLoading } = useAuthStore()
   const router = useRouter()

@@ -3,7 +3,8 @@
 
 import { useTaskStore } from '@/stores/taskStore';
 import { useAuthStore } from '@/stores/authStore';
-import { CheckSquare, Calendar, ArrowRight } from 'lucide-react';
+import { Calendar, CheckSquare, ArrowRight } from 'lucide-react';
+import { DASHBOARD_TASK_LIMIT } from '@/lib/constants';
 import Link from 'next/link';
 import type { Task } from '@/types';
 
@@ -42,7 +43,7 @@ export function MyTasksList() {
   const { getRecentTasks, updateTaskStatus } = useTaskStore();
   const { user } = useAuthStore();
 
-  const myTasks = !user?.uid ? [] : getRecentTasks(user.uid, 6);
+  const myTasks = !user?.uid ? [] : getRecentTasks(user.uid, DASHBOARD_TASK_LIMIT);
 
   return (
     <div className="glass-panel p-6 shadow-md transition-all duration-300 hover:shadow-lg">
