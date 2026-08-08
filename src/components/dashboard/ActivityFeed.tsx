@@ -5,6 +5,8 @@ import { useTaskStore } from '@/stores/taskStore';
 import { TASK_STATUS_CONFIG } from '@/lib/constants';
 import { relativeTime } from '@/lib/utils';
 
+import { Activity } from 'lucide-react';
+
 export function ActivityFeed() {
   const { tasks } = useTaskStore();
 
@@ -18,7 +20,11 @@ export function ActivityFeed() {
     <div className="glass-panel p-6 shadow-md transition-all duration-300 hover:shadow-lg">
       <h2 className="text-sm font-semibold text-primary mb-6 uppercase tracking-wider">Activity Feed</h2>
       {recent.length === 0 ? (
-        <p className="text-sm text-center py-6 text-muted">No activity yet</p>
+        <div className="flex flex-col items-center justify-center py-10 text-center">
+          <Activity className="w-8 h-8 text-muted mb-3 opacity-50" />
+          <p className="text-sm font-medium text-secondary">No activity yet</p>
+          <p className="text-xs text-muted mt-1">Actions on your tasks will appear here</p>
+        </div>
       ) : (
         <div className="relative before:absolute before:inset-0 before:ml-[11px] before:-translate-x-px before:h-full before:w-px before:bg-border-subtle/70 space-y-5">
           {recent.map((task) => {

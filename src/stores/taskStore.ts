@@ -1,7 +1,9 @@
 import { create } from 'zustand';
 import type { Task, TaskStatus, Priority } from '@/types';
-import { fetchWithRetry } from '@/lib/network';
 import { logger } from '@/lib/logger';
+import { db } from '@/lib/firebase/client';
+import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, where } from 'firebase/firestore';
+import { useAuthStore } from './authStore';
 
 interface TaskFilters {
   status?: TaskStatus;
@@ -13,7 +15,7 @@ interface TaskFilters {
 /**
  * Global state management for Tasks using Zustand.
  * Handles fetching, creating, updating, and filtering tasks,
- * interacting directly with the backend API or managing local state during the MVP.
+ * interacting directly with Firebase Firestore.
  */
 interface TaskState {
   /** The master array of all loaded tasks in the system. */
@@ -26,8 +28,8 @@ interface TaskState {
   isLoading: boolean;
   /** Holds the latest error message if a network request fails. */
   error: string | null;
-  /** Fetches all tasks, optionally constrained by a projectId. */
-  fetchTasks: (projectId?: string) => Promise<void>;
+  /** Fetches all tasks for the current user. */
+  fetchTasks: () => Promise<void>;
   /** Creates a new task and optimistically adds it to the local store. */
   createTask: (data: Partial<Task>) => Promise<void>;
   /** Updates an existing task and optimistically applies the change locally. */
@@ -48,8 +50,6 @@ interface TaskState {
   getRecentTasks: (userId: string, limit: number) => Task[];
 }
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
-
 export const useTaskStore = create<TaskState>()((set, get) => ({
   tasks: [],
   selectedTask: null,
@@ -57,14 +57,22 @@ export const useTaskStore = create<TaskState>()((set, get) => ({
   isLoading: false,
   error: null,
 
-  fetchTasks: async (projectId?: string) => {
+  fetchTasks: async () => {
+    const userId = useAuthStore.getState().user?.uid;
+    if (!userId) {
+      set({ tasks: [], isLoading: false });
+      return;
+    }
+
     set({ isLoading: true, error: null });
     try {
-      const url = projectId
-        ? `${API_URL}/tasks?projectId=${projectId}`
-        : `${API_URL}/tasks`;
-      const res = await fetchWithRetry(url);
-      const tasks: Task[] = await res.json();
+      if (!db) throw new Error("Firestore not initialized");
+      const q = query(collection(db, 'tasks'), where('userId', '==', userId));
+      const querySnapshot = await getDocs(q);
+      const tasks: Task[] = [];
+      querySnapshot.forEach((doc) => {
+        tasks.push({ id: doc.id, ...doc.data() } as Task);
+      });
       set({ tasks, isLoading: false });
       logger.info('Tasks fetched successfully', { count: tasks.length });
     } catch (error) {
@@ -74,9 +82,12 @@ export const useTaskStore = create<TaskState>()((set, get) => ({
   },
 
   createTask: async (data: Partial<Task>) => {
+    const userId = useAuthStore.getState().user?.uid;
+    if (!userId) return;
+
     try {
-      const newTask: Task = {
-        id: `tm-${Date.now()}`,
+      if (!db) throw new Error("Firestore not initialized");
+      const newTaskData = {
         title: data.title || 'Untitled Task',
         status: data.status || 'todo',
         priority: data.priority || 'medium',
@@ -87,37 +98,53 @@ export const useTaskStore = create<TaskState>()((set, get) => ({
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
         ...data,
+        userId: userId, // Ensure ownership is strictly set to current user
       };
-      await fetchWithRetry(`${API_URL}/tasks`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newTask),
-      });
+      
+      const docRef = await addDoc(collection(db, 'tasks'), newTaskData);
+      const newTask = { id: docRef.id, ...newTaskData } as Task;
+      
       set((state) => ({ tasks: [...state.tasks, newTask] }));
       logger.info('Task created successfully', { taskId: newTask.id });
     } catch (error) {
       set({ error: 'Failed to create task' });
       logger.error('Failed to create task', { error: String(error) });
+      throw error;
     }
   },
 
   updateTask: async (id: string, data: Partial<Task>) => {
+    const userId = useAuthStore.getState().user?.uid;
+    if (!userId) return;
+
     const prevTasks = get().tasks;
+    
+    // Optimistic update
     set((state) => ({
       tasks: state.tasks.map((t) =>
         t.id === id ? { ...t, ...data, updatedAt: new Date().toISOString() } : t
       ),
     }));
+    
     try {
-      await fetchWithRetry(`${API_URL}/tasks/${id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...data, updatedAt: new Date().toISOString() }),
+      if (!db) throw new Error("Firestore not initialized");
+      const taskRef = doc(db, 'tasks', id);
+      
+      // Exclude id and userId from being updated
+      const updateData = { ...data } as Record<string, unknown>;
+      delete updateData.id;
+      delete updateData.userId;
+      
+      await updateDoc(taskRef, {
+        ...updateData,
+        updatedAt: new Date().toISOString()
       });
       logger.info('Task updated successfully', { taskId: id });
     } catch (error) {
+      // Revert optimistic update
       set({ tasks: prevTasks, error: 'Failed to update task' });
       logger.error('Failed to update task', { error: String(error), taskId: id });
+      throw error;
     }
   },
 
@@ -126,14 +153,20 @@ export const useTaskStore = create<TaskState>()((set, get) => ({
   },
 
   deleteTask: async (id: string) => {
+    const userId = useAuthStore.getState().user?.uid;
+    if (!userId) return;
+
     const prevTasks = get().tasks;
     set((state) => ({ tasks: state.tasks.filter((t) => t.id !== id) }));
+    
     try {
-      await fetchWithRetry(`${API_URL}/tasks/${id}`, { method: 'DELETE' });
+      if (!db) throw new Error("Firestore not initialized");
+      await deleteDoc(doc(db, 'tasks', id));
       logger.info('Task deleted successfully', { taskId: id });
     } catch (error) {
       set({ tasks: prevTasks, error: 'Failed to delete task' });
       logger.error('Failed to delete task', { error: String(error), taskId: id });
+      throw error;
     }
   },
 
@@ -142,7 +175,7 @@ export const useTaskStore = create<TaskState>()((set, get) => ({
   setFilters: (filters) =>
     set((state) => ({ filters: { ...state.filters, ...filters } })),
 
-  getTasksByStatus: (status) => get().tasks.filter((t) => t.status === status),
+  getTasksByStatus: (status) => get().getFilteredTasks().filter((t) => t.status === status),
 
   getFilteredTasks: () => {
     const { tasks, filters } = get();
@@ -159,10 +192,8 @@ export const useTaskStore = create<TaskState>()((set, get) => ({
   },
 
   getRecentTasks: (userId: string, limit: number) => {
-    // TODO (Scalability): Move this logic to the backend using Firebase query pagination 
-    // e.g., query(collection, where('assigneeId', '==', userId), limit(6))
     return get().tasks
-      .filter((t) => t.assigneeId === userId && t.status !== 'done')
+      .filter((t) => (t.assigneeId === userId || t.userId === userId) && t.status !== 'done')
       .slice(0, limit);
   }
 }));

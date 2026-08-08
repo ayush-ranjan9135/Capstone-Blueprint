@@ -5,7 +5,8 @@ import { useTaskStore } from '@/stores/taskStore';
 import type { Task, TaskStatus } from '@/types';
 import { TaskCard } from './TaskCard';
 import { TaskModal } from './TaskModal';
-import { Plus } from 'lucide-react';
+import { Plus, Search, X } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 const COLUMNS: { id: TaskStatus; label: string; textClass: string; bgClass: string; borderClass: string }[] = [
   { id: 'backlog', label: 'Backlog', textClass: 'text-muted', bgClass: 'bg-muted/10', borderClass: 'border-muted' },
@@ -22,16 +23,23 @@ export function KanbanBoard() {
   const [modalOpen, setModalOpen] = useState(false);
   const [quickAdd, setQuickAdd] = useState<TaskStatus | null>(null);
   const [quickTitle, setQuickTitle] = useState('');
+  const { filters, setFilters } = useTaskStore();
 
   const handleDragStart = (e: React.DragEvent, taskId: string) => {
     e.dataTransfer.setData('taskId', taskId);
     setDraggingId(taskId);
   };
 
-  const handleDrop = (e: React.DragEvent, status: TaskStatus) => {
+  const handleDrop = async (e: React.DragEvent, status: TaskStatus) => {
     e.preventDefault();
     const taskId = e.dataTransfer.getData('taskId');
-    if (taskId) updateTaskStatus(taskId, status);
+    if (taskId) {
+      try {
+        await updateTaskStatus(taskId, status);
+      } catch {
+        toast.error('Failed to move task');
+      }
+    }
     setDragOverCol(null);
     setDraggingId(null);
   };
@@ -41,22 +49,49 @@ export function KanbanBoard() {
     setModalOpen(true);
   };
 
-  const handleQuickAdd = (status: TaskStatus) => {
+  const handleQuickAdd = async (status: TaskStatus) => {
     if (!quickTitle.trim()) { setQuickAdd(null); return; }
-    createTask({ title: quickTitle.trim(), status, projectId: 'proj-1' });
-    setQuickTitle('');
-    setQuickAdd(null);
+    try {
+      await createTask({ title: quickTitle.trim(), status, projectId: 'proj-1' });
+      setQuickTitle('');
+      setQuickAdd(null);
+      toast.success('Task created');
+    } catch {
+      toast.error('Failed to create task');
+    }
   };
 
   return (
     <div className="h-full flex flex-col min-h-0">
       {/* Toolbar */}
       <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2">
-          <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-brand-muted text-brand border border-brand/20">
-            Sprint 13
-          </span>
-          <span className="text-xs font-medium text-secondary">{tasks.length} tasks</span>
+        <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-brand-muted text-brand border border-brand/20">
+              Sprint 13
+            </span>
+            <span className="text-xs font-medium text-secondary">{tasks.length} tasks</span>
+          </div>
+          
+          {/* Search Bar */}
+          <div className="relative group w-full sm:w-64">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted group-focus-within:text-brand transition-colors" />
+            <input
+              type="text"
+              placeholder="Search tasks..."
+              value={filters.search || ''}
+              onChange={(e) => setFilters({ search: e.target.value })}
+              className="w-full pl-9 pr-8 py-2 rounded-xl text-sm bg-surface border border-border-subtle focus:border-brand focus:ring-1 focus:ring-brand outline-none transition-all placeholder:text-muted"
+            />
+            {filters.search && (
+              <button 
+                onClick={() => setFilters({ search: '' })}
+                className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted hover:text-primary"
+              >
+                <X className="w-3 h-3" />
+              </button>
+            )}
+          </div>
         </div>
         <div className="flex items-center gap-2">
           <button

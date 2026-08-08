@@ -43,6 +43,7 @@ export interface Task {
   status: TaskStatus;
   priority: Priority;
   projectId: string;
+  userId: string;
   sprintId?: string;
   assigneeId?: string;
   reporterId?: string;

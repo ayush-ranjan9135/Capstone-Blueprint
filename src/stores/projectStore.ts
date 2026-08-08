@@ -9,7 +9,7 @@ interface ProjectState {
   setCurrentProject: (project: Project | null) => void;
 }
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+
 
 export const useProjectStore = create<ProjectState>()((set) => ({
   projects: [],
@@ -18,13 +18,15 @@ export const useProjectStore = create<ProjectState>()((set) => ({
 
   fetchProjects: async () => {
     set({ isLoading: true });
-    try {
-      const res = await fetch(`${API_URL}/projects`);
-      const projects: Project[] = await res.json();
-      set({ projects, isLoading: false });
-    } catch {
-      set({ isLoading: false });
-    }
+    // Mock projects for the dashboard since Firebase projects collection isn't implemented yet
+    const mockProjects: Project[] = [
+      { id: 'proj-1', name: 'TaskMatrix MVP', color: '#6366f1', description: 'Core app features', status: 'active', memberIds: [], createdAt: '', updatedAt: '' },
+      { id: 'proj-2', name: 'Marketing Site', color: '#10b981', description: 'Landing page', status: 'active', memberIds: [], createdAt: '', updatedAt: '' },
+    ];
+    // Small delay to simulate network
+    setTimeout(() => {
+      set({ projects: mockProjects, isLoading: false });
+    }, 500);
   },
 
   setCurrentProject: (project) => set({ currentProject: project }),

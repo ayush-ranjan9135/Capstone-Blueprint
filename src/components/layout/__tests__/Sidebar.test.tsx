@@ -24,7 +24,7 @@ vi.mock('@/lib/firebase/client', () => ({
 describe('Sidebar Component', () => {
   beforeEach(() => {
     useAuthStore.setState({ 
-      user: { uid: '123', email: 'test@example.com', displayName: 'Test User' } as any,
+      user: { uid: '123', email: 'test@example.com', displayName: 'Test User' } as unknown as import('firebase/auth').User,
       isAuthenticated: true,
       isLoading: false
     });
@@ -38,7 +38,6 @@ describe('Sidebar Component', () => {
   });
 
   it('collapses when toggle button is clicked', () => {
-    const { toggleSidebar } = useUIStore.getState();
     const spy = vi.spyOn(useUIStore.getState(), 'toggleSidebar');
     
     const { container } = render(<Sidebar />);

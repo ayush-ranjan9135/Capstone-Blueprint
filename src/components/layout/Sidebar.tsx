@@ -31,9 +31,20 @@ export function Sidebar() {
   };
 
   return (
-    <aside
-      className="fixed left-0 top-0 h-full z-50 flex flex-col overflow-hidden transition-all duration-[250ms] bg-surface border-r border-border-subtle"
-      style={{ width: sidebarOpen ? '240px' : '64px' }}>
+    <>
+      {/* Mobile Backdrop */}
+      {sidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-40 md:hidden"
+          onClick={toggleSidebar}
+        />
+      )}
+      
+      <aside
+        className={`fixed left-0 top-0 h-full z-50 flex flex-col overflow-hidden transition-all duration-[250ms] bg-surface border-r border-border-subtle ${
+          sidebarOpen ? 'w-[240px] translate-x-0' : 'w-[64px] -translate-x-full md:translate-x-0'
+        }`}
+      >
 
       {/* Logo */}
       <div className="flex items-center h-14 px-4 flex-shrink-0 border-b border-border-subtle">
@@ -146,6 +157,7 @@ export function Sidebar() {
           )}
         </div>
       </div>
-    </aside>
+      </aside>
+    </>
   );
 }

@@ -53,6 +53,8 @@ The application follows a standard modular frontend architecture within the Next
 | **UI/Styling** | Tailwind CSS v4 | Utility-first CSS framework for rapid, custom design. |
 | **State Management**| Zustand | Small, fast, scalable barebones state management. |
 | **Authentication**| Firebase Auth | Secure, reliable user authentication (Email/Password). |
+| **Database** | Firebase Firestore | Real-time NoSQL database for secure data persistence. |
+| **Data Viz** | Recharts | Composable charting library built on React components. |
 | **Animations** | Framer Motion | Production-ready declarative animations. |
 | **Forms & Validation**| react-hook-form + Zod | Performant, flexible, and extensible forms with strict schema validation. |
 | **Icons** | Lucide React | Beautiful, consistent open-source icons. |

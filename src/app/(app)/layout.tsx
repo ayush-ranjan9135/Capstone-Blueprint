@@ -37,8 +37,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex h-screen overflow-hidden bg-base text-primary transition-colors duration-200">
       <Sidebar />
-      <div className="flex flex-col flex-1 min-w-0 overflow-hidden transition-all duration-[250ms]"
-        style={{ marginLeft: sidebarOpen ? '240px' : '64px' }}>
+      <div className={`flex flex-col flex-1 min-w-0 overflow-hidden transition-all duration-[250ms] ${sidebarOpen ? 'md:ml-[240px]' : 'md:ml-[64px]'} ml-0`}
+        >
         <Header />
         <main className="flex-1 overflow-y-auto p-6 md:p-8">
           {children}

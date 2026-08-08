@@ -172,6 +172,8 @@ export default function LoginPage() {
                       type="email"
                       autoComplete="email"
                       {...register('email')}
+                      aria-invalid={!!errors.email}
+                      aria-describedby={errors.email ? "email-error" : undefined}
                       className={`block w-full px-4 py-3 bg-white/5 border ${
                         errors.email ? 'border-red-500/50 focus:border-red-500' : 'border-white/10 focus:border-purple-500/50'
                       } rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-0 focus:bg-white/10 transition-all duration-300`}
@@ -179,7 +181,7 @@ export default function LoginPage() {
                     />
                     <div className={`absolute inset-0 rounded-xl pointer-events-none transition-opacity duration-300 ${errors.email ? 'opacity-100 ring-1 ring-red-500/50' : 'opacity-0 group-focus-within:opacity-100 ring-1 ring-purple-500/50'}`} />
                     {errors.email && (
-                      <p className="mt-2 text-xs text-red-400">{errors.email.message}</p>
+                      <p id="email-error" className="mt-2 text-xs text-red-400" role="alert">{errors.email.message}</p>
                     )}
                   </div>
                 </motion.div>
@@ -198,6 +200,8 @@ export default function LoginPage() {
                       type={showPassword ? 'text' : 'password'}
                       autoComplete="current-password"
                       {...register('password')}
+                      aria-invalid={!!errors.password}
+                      aria-describedby={errors.password ? "password-error" : undefined}
                       className={`block w-full px-4 py-3 bg-white/5 border ${
                         errors.password ? 'border-red-500/50 focus:border-red-500' : 'border-white/10 focus:border-purple-500/50'
                       } rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-0 focus:bg-white/10 transition-all duration-300 pr-12`}
@@ -208,11 +212,12 @@ export default function LoginPage() {
                       type="button"
                       className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-gray-200 transition-colors focus:outline-none"
                       onClick={() => setShowPassword(!showPassword)}
+                      aria-label={showPassword ? "Hide password" : "Show password"}
                     >
                       {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                     </button>
                     {errors.password && (
-                      <p className="mt-2 text-xs text-red-400">{errors.password.message}</p>
+                      <p id="password-error" className="mt-2 text-xs text-red-400" role="alert">{errors.password.message}</p>
                     )}
                   </div>
                 </motion.div>

@@ -8,6 +8,9 @@ import { StatsGrid } from '@/components/dashboard/StatsGrid';
 import { RecentProjects } from '@/components/dashboard/RecentProjects';
 import { MyTasksList } from '@/components/dashboard/MyTasksList';
 import { ActivityFeed } from '@/components/dashboard/ActivityFeed';
+import dynamic from 'next/dynamic';
+
+const TaskCharts = dynamic(() => import('@/components/dashboard/TaskCharts').then(mod => mod.TaskCharts), { ssr: false });
 
 export default function DashboardPage() {
   const { fetchTasks } = useTaskStore();
@@ -36,6 +39,7 @@ export default function DashboardPage() {
 
       {/* Stats */}
       <StatsGrid />
+      <TaskCharts />
 
       {/* Main content grid */}
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
