@@ -48,9 +48,9 @@ export interface Task {
   assigneeId?: string;
   reporterId?: string;
   labels: string[];
-  storyPoints?: number;
-  startDate?: string;
-  dueDate?: string;
+  storyPoints?: number | null;
+  startDate?: string | null;
+  dueDate?: string | null;
   subtasks: Subtask[];
   comments: Comment[];
   createdAt: string;
