@@ -77,13 +77,13 @@ export default function NotificationsPage() {
 
   return (
     <div className="w-full max-w-5xl space-y-8 animate-fade-up relative z-10 pb-12">
-      <div className="flex items-end justify-between mb-8">
-        <div>
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
+        <div className="min-w-0">
           <div className="flex items-center gap-3 mb-1">
-            <Bell size={28} className="text-brand" />
-            <h1 className="text-3xl font-bold text-primary tracking-tight pb-1">Notifications</h1>
+            <Bell size={28} className="text-brand flex-shrink-0" />
+            <h1 className="text-3xl font-bold text-primary tracking-tight pb-1 truncate">Notifications</h1>
           </div>
-          <p className="text-sm mt-2 text-secondary font-medium">
+          <p className="text-sm mt-2 text-secondary font-medium truncate">
             You have {unreadCount} unread notification{unreadCount !== 1 ? 's' : ''}.
           </p>
         </div>
@@ -91,7 +91,7 @@ export default function NotificationsPage() {
         {unreadCount > 0 && (
           <button 
             onClick={markAllAsRead}
-            className="text-xs font-bold px-4 py-2 rounded-lg bg-overlay hover:bg-border-subtle text-primary transition-all duration-200 border border-border-strong hover:border-brand-muted flex items-center gap-2"
+            className="text-xs font-bold px-4 py-2 rounded-lg bg-overlay hover:bg-border-subtle text-primary transition-all duration-200 border border-border-strong hover:border-brand-muted flex items-center gap-2 whitespace-nowrap self-start sm:self-auto"
           >
             <Check size={14} />
             Mark all as read
@@ -125,7 +125,7 @@ export default function NotificationsPage() {
                     {notification.timeAgo}
                   </span>
                 </div>
-                <p className="text-sm text-secondary mt-1.5 leading-relaxed">
+                <p className="text-sm text-secondary mt-1.5 leading-relaxed break-words whitespace-normal">
                   {notification.body}
                 </p>
                 

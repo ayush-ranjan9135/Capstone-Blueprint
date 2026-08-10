@@ -58,6 +58,7 @@ The application follows a standard modular frontend architecture within the Next
 | **Animations** | Framer Motion | Production-ready declarative animations. |
 | **Forms & Validation**| react-hook-form + Zod | Performant, flexible, and extensible forms with strict schema validation. |
 | **Icons** | Lucide React | Beautiful, consistent open-source icons. |
+| **AI Integration** | Google Gemini API | Automated task sub-step generation and domain-specific assistance. |
 
 ---
 

@@ -40,7 +40,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       <div className={`flex flex-col flex-1 min-w-0 overflow-hidden transition-all duration-[250ms] ${sidebarOpen ? 'md:ml-[240px]' : 'md:ml-[64px]'} ml-0`}
         >
         <Header />
-        <main className="flex-1 overflow-y-auto p-6 md:p-8">
+        <main className="flex-1 overflow-y-auto overflow-x-hidden min-w-0 p-4 md:p-8">
           {children}
         </main>
       </div>

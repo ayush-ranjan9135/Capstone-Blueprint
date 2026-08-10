@@ -62,25 +62,25 @@ export function Header() {
   const isDarkMode = mounted && (theme === 'dark' || (theme === 'system' && document.documentElement.classList.contains('dark')));
 
   return (
-    <header className="h-14 flex items-center px-4 md:px-6 gap-3 md:gap-4 flex-shrink-0 bg-surface border-b border-border-subtle sticky top-0 z-40">
+    <header className="h-14 flex items-center px-3 md:px-6 gap-2 md:gap-4 flex-shrink-0 bg-surface border-b border-border-subtle sticky top-0 z-40 min-w-0">
       <button
         onClick={useUIStore().toggleSidebar}
-        className="md:hidden w-9 h-9 flex items-center justify-center rounded-xl text-muted hover:text-primary hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
+        className="md:hidden w-8 h-8 flex-shrink-0 flex items-center justify-center rounded-xl text-muted hover:text-primary hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
         aria-label="Toggle sidebar"
       >
         <Menu size={20} />
       </button>
-      <h2 className="font-semibold text-sm text-primary">{pageTitle}</h2>
+      <h2 className="font-semibold text-sm text-primary hidden sm:block flex-shrink-0">{pageTitle}</h2>
 
-      <div className="flex-1 max-w-md ml-8">
-        <div className="flex items-center gap-2 px-4 py-2 rounded-xl cursor-text transition-all duration-300 bg-black/5 dark:bg-white/5 border border-transparent hover:border-border-strong focus-within:!border-brand focus-within:!bg-surface focus-within:shadow-[0_0_15px_rgba(var(--brand-rgb),0.1)]">
+      <div className="flex-1 max-w-md ml-1 md:ml-8 min-w-0">
+        <div className="flex items-center gap-1.5 md:gap-2 px-2.5 md:px-4 py-2 rounded-xl cursor-text transition-all duration-300 bg-black/5 dark:bg-white/5 border border-transparent hover:border-border-strong focus-within:!border-brand focus-within:!bg-surface focus-within:shadow-[0_0_15px_rgba(var(--brand-rgb),0.1)] min-w-0">
           <Search size={15} className="text-muted flex-shrink-0" />
           <input 
             type="text" 
-            placeholder="Search tasks, projects…" 
-            className="text-[13px] text-primary bg-transparent outline-none w-full placeholder:text-muted"
+            placeholder="Search..." 
+            className="text-[13px] text-primary bg-transparent outline-none w-full placeholder:text-muted min-w-0"
           />
-          <kbd className="ml-auto text-[10px] px-1.5 py-0.5 rounded-md bg-white/50 dark:bg-black/30 text-muted border border-border-subtle font-semibold flex-shrink-0">
+          <kbd className="hidden md:block ml-auto text-[10px] px-1.5 py-0.5 rounded-md bg-white/50 dark:bg-black/30 text-muted border border-border-subtle font-semibold flex-shrink-0">
             ⌘K
           </kbd>
         </div>
