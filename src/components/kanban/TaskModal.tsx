@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useTaskStore } from '@/stores/taskStore';
 import type { TaskStatus, Priority } from '@/types';
-import { X, Trash2, Calendar, Tag, AlignLeft, CheckSquare, Square } from 'lucide-react';
+import { X, Trash2, Calendar, Tag, AlignLeft, CheckSquare, Square, Sparkles } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 const statusOptions: { value: TaskStatus; label: string; textClass: string }[] = [
@@ -38,6 +38,7 @@ export function TaskModal({ open, onClose }: TaskModalProps) {
   const [newSubtask, setNewSubtask] = useState('');
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [isGeneratingAI, setIsGeneratingAI] = useState(false);
 
   useEffect(() => {
     if (selectedTask) {
@@ -114,6 +115,41 @@ export function TaskModal({ open, onClose }: TaskModalProps) {
     }
   };
 
+  const handleGenerateSubtasks = async () => {
+    if (!title.trim()) {
+      toast.error('Please enter a task title first');
+      return;
+    }
+    
+    setIsGeneratingAI(true);
+    try {
+      const response = await fetch('/api/ai/task-breakdown', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, description }),
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok || !data.success) {
+        throw new Error(data.error || 'Failed to generate subtasks');
+      }
+      
+      const aiSubtasks = data.data.subtasks.map((st: string) => ({
+        id: `st-ai-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        title: st,
+        completed: false
+      }));
+      
+      setSubtasks((prev) => [...prev, ...aiSubtasks]);
+      toast.success('AI subtasks generated');
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'Unable to generate AI suggestions');
+    } finally {
+      setIsGeneratingAI(false);
+    }
+  };
+
   const addSubtask = () => {
     if (!newSubtask.trim()) return;
     setSubtasks((prev) => [...prev, { id: `st-${Date.now()}`, title: newSubtask.trim(), completed: false }]);
@@ -184,9 +220,19 @@ export function TaskModal({ open, onClose }: TaskModalProps) {
                   <CheckSquare size={14} className="text-secondary" />
                   <span className="text-sm font-semibold text-primary">Subtasks</span>
                 </div>
-                <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-base border border-border-subtle text-secondary">
-                  {subtasks.filter(s => s.completed).length} / {subtasks.length} done
-                </span>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={handleGenerateSubtasks}
+                    disabled={isGeneratingAI || !title.trim()}
+                    className="flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold bg-brand/10 text-brand hover:bg-brand/20 disabled:opacity-50 disabled:cursor-not-allowed transition-colors border border-brand/20"
+                  >
+                    <Sparkles size={12} className={isGeneratingAI ? 'animate-pulse' : ''} />
+                    {isGeneratingAI ? 'Generating...' : 'Generate AI Subtasks'}
+                  </button>
+                  <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-base border border-border-subtle text-secondary">
+                    {subtasks.filter(s => s.completed).length} / {subtasks.length} done
+                  </span>
+                </div>
               </div>
               
               <div className="space-y-2 mb-3">

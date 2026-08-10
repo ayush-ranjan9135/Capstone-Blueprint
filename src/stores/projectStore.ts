@@ -20,8 +20,8 @@ export const useProjectStore = create<ProjectState>()((set) => ({
     set({ isLoading: true });
     // Mock projects for the dashboard since Firebase projects collection isn't implemented yet
     const mockProjects: Project[] = [
-      { id: 'proj-1', name: 'TaskMatrix MVP', color: '#6366f1', description: 'Core app features', status: 'active', memberIds: [], createdAt: '', updatedAt: '' },
-      { id: 'proj-2', name: 'Marketing Site', color: '#10b981', description: 'Landing page', status: 'active', memberIds: [], createdAt: '', updatedAt: '' },
+      { id: 'proj-1', name: 'TaskMatrix MVP', color: '#6366f1', description: 'Core app features', status: 'active', ownerId: 'system', memberIds: [], createdAt: '', updatedAt: '' },
+      { id: 'proj-2', name: 'Marketing Site', color: '#10b981', description: 'Landing page', status: 'active', ownerId: 'system', memberIds: [], createdAt: '', updatedAt: '' },
     ];
     // Small delay to simulate network
     setTimeout(() => {

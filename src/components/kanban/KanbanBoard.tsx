@@ -172,6 +172,12 @@ export function KanbanBoard() {
                     </div>
                   </div>
                 )}
+                
+                {colTasks.length === 0 && quickAdd !== col.id && (
+                  <div className="flex flex-col items-center justify-center h-24 p-4 text-center rounded-xl border border-dashed border-border-subtle bg-base/50">
+                    <span className="text-xs font-medium text-muted">No tasks</span>
+                  </div>
+                )}
               </div>
             </div>
           );

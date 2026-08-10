@@ -4,9 +4,10 @@ import { useThemeStore } from '@/stores/themeStore';
 import { useAuthStore } from '@/stores/authStore';
 import { auth } from '@/lib/firebase/client';
 import { signOut } from 'firebase/auth';
-import { Search, Bell, Moon, Sun } from 'lucide-react';
+import { Search, Bell, Moon, Sun, Menu } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState, useRef } from 'react';
+import { useUIStore } from '@/stores/uiStore';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -61,7 +62,14 @@ export function Header() {
   const isDarkMode = mounted && (theme === 'dark' || (theme === 'system' && document.documentElement.classList.contains('dark')));
 
   return (
-    <header className="h-14 flex items-center px-6 gap-4 flex-shrink-0 bg-surface border-b border-border-subtle sticky top-0 z-40">
+    <header className="h-14 flex items-center px-4 md:px-6 gap-3 md:gap-4 flex-shrink-0 bg-surface border-b border-border-subtle sticky top-0 z-40">
+      <button
+        onClick={useUIStore().toggleSidebar}
+        className="md:hidden w-9 h-9 flex items-center justify-center rounded-xl text-muted hover:text-primary hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
+        aria-label="Toggle sidebar"
+      >
+        <Menu size={20} />
+      </button>
       <h2 className="font-semibold text-sm text-primary">{pageTitle}</h2>
 
       <div className="flex-1 max-w-md ml-8">

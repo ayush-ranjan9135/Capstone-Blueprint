@@ -13,8 +13,8 @@ import dynamic from 'next/dynamic';
 const TaskCharts = dynamic(() => import('@/components/dashboard/TaskCharts').then(mod => mod.TaskCharts), { ssr: false });
 
 export default function DashboardPage() {
-  const { fetchTasks } = useTaskStore();
-  const { fetchProjects } = useProjectStore();
+  const { fetchTasks, isLoading: isTasksLoading } = useTaskStore();
+  const { fetchProjects, isLoading: isProjectsLoading } = useProjectStore();
   const { user } = useAuthStore();
 
   useEffect(() => {
@@ -24,6 +24,7 @@ export default function DashboardPage() {
 
   const hour = new Date().getHours();
   const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+  const isLoading = isTasksLoading || isProjectsLoading;
 
   return (
     <div className="space-y-8 animate-fade-up">
@@ -37,9 +38,19 @@ export default function DashboardPage() {
         </p>
       </div>
 
-      {/* Stats */}
-      <StatsGrid />
-      <TaskCharts />
+      {isLoading ? (
+        <div className="space-y-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {[1,2,3,4].map((i) => <div key={i} className="h-32 bg-base/50 animate-pulse rounded-2xl border border-border-subtle" />)}
+          </div>
+          <div className="h-80 bg-base/50 animate-pulse rounded-2xl border border-border-subtle" />
+        </div>
+      ) : (
+        <>
+          <StatsGrid />
+          <TaskCharts />
+        </>
+      )}
 
       {/* Main content grid */}
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
