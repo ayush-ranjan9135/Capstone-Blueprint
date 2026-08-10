@@ -83,8 +83,8 @@ export function TaskModal({ open, onClose }: TaskModalProps) {
     setIsSaving(true);
     const data = {
       title, description, status, priority,
-      dueDate: dueDate || undefined,
-      storyPoints: storyPoints ? parseInt(storyPoints) : undefined,
+      dueDate: dueDate || null,
+      storyPoints: storyPoints ? parseInt(storyPoints) : null,
       subtasks,
     };
     try {
