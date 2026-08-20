@@ -8,9 +8,10 @@ import { auth } from '@/lib/firebase/client'
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { Eye, EyeOff, Loader2, ArrowRight, CheckCircle2, LayoutDashboard, Users, Zap } from 'lucide-react'
+import { Eye, EyeOff, Loader2, ArrowRight, CheckCircle2, Users, Zap } from 'lucide-react'
 import { motion } from 'framer-motion'
 import toast from 'react-hot-toast'
+import { Logo } from '@/components/brand/Logo'
 
 const registerSchema = z
   .object({
@@ -76,10 +77,7 @@ export default function RegisterPage() {
           transition={{ duration: 0.6 }}
         >
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/20">
-              <LayoutDashboard className="w-5 h-5 text-white" />
-            </div>
-            <h1 className="text-2xl font-bold tracking-tight">TaskMatrix</h1>
+            <Logo size="lg" />
           </div>
         </motion.div>
 
@@ -139,11 +137,8 @@ export default function RegisterPage() {
             className="mb-8"
           >
             {/* Mobile Logo (Visible only on small screens) */}
-            <div className="flex lg:hidden items-center gap-3 mb-8 justify-center">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/20">
-                <LayoutDashboard className="w-5 h-5 text-white" />
-              </div>
-              <h1 className="text-2xl font-bold tracking-tight">TaskMatrix</h1>
+            <div className="flex lg:hidden items-center justify-center mb-8">
+              <Logo size="lg" />
             </div>
 
             <h2 className="text-3xl font-extrabold text-white">
